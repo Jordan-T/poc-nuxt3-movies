@@ -28,7 +28,7 @@ const { data: nowMovies } = await useFetch<{ results: ApiMovie[] }>(
   &__list {
     display: grid;
     align-items: flex-start;
-    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     grid-gap: space(4);
   }
 }

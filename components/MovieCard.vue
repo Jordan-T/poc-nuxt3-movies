@@ -21,16 +21,18 @@ defineProps({
       </div>
     </template>
 
-    <p class="c-movie-card__title">
-      <NuxtLink
-        class="c-movie-card__link"
-        :to="{ name: 'movies-movieId', params: { movieId: movie.id } }"
-      >
-        {{ movie.title }}
-      </NuxtLink>
-    </p>
+    <div class="c-movie-card__content">
+      <p class="c-movie-card__title">
+        <NuxtLink
+          class="c-movie-card__link"
+          :to="{ name: 'movies-movieId', params: { movieId: movie.id } }"
+        >
+          <span>{{ movie.title }}</span>
+        </NuxtLink>
+      </p>
 
-    <BaseRating class="c-movie-card__review" :rating="movie.vote_average" />
+      <BaseRating class="c-movie-card__review" :rating="movie.vote_average" />
+    </div>
 
     <!--
     <p class="c-movie-card__description">{{ movie.overview }}</p>
@@ -66,16 +68,35 @@ defineProps({
 
   &__image {
     transition: transform $speed-slower ease-out;
+
+    @supports (aspect-ratio: 1 / 1) {
+      aspect-ratio: 500 / 750;
+      height: auto;
+    }
+  }
+
+  &__content {
+    margin-top: space("000");
+    margin-bottom: space("000");
+    display: flex;
+    align-items: center;
+    min-height: 3.75em;
   }
 
   &__title {
     color: $t-text-strong;
+    flex-grow: 1;
   }
 
   &__link {
     color: inherit;
     text-decoration: none;
+    line-height: 1.25;
     transition: color $speed-slow;
+
+    span {
+      @include lineClamp(3);
+    }
 
     &::before {
       content: "";
@@ -95,6 +116,11 @@ defineProps({
       outline: 1px solid $t-focus-ring;
       outline-offset: 1px;
     }
+  }
+
+  &__review {
+    flex-shrink: 0;
+    margin-left: space(2);
   }
 
   &:hover {

@@ -1,6 +1,11 @@
 <script lang="ts" setup>
 const pages = [
   {
+    path: "/",
+    icon: "Movie-Ticket",
+    title: "Nouveautés",
+  },
+  {
     path: "/series",
     icon: "Old-TV",
     title: "Séries TV",
@@ -14,11 +19,6 @@ const pages = [
     path: "/playlists",
     icon: "Movie",
     title: "Playlists",
-  },
-  {
-    path: "/",
-    icon: "Movie-Ticket",
-    title: "Nouveautés",
   },
   {
     path: "/coming-soon",
