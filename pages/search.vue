@@ -7,11 +7,15 @@ const {
   error,
   pending,
   refresh,
-} = useLazyFetch<{
+} = await useAsyncData<{
   results: ApiMovie[];
-}>(() => `/api/movies/search/${search.value}`, {
-  server: false,
-});
+}>(
+  `search-${search.value}`,
+  () => $fetch(`/api/movies/search/${search.value}`),
+  {
+    server: false,
+  }
+);
 
 watch(route, () => {
   if (search.value !== route.query.q) {
@@ -33,23 +37,25 @@ const foundMovies = computed(() => {
 </script>
 
 <template>
-  <NuxtLayout class="p-search" name="default">
-    <div class="p-search__section">
-      <h1 class="h2 mb-4">Résultats de recherche pour "{{ search }}"</h1>
-      <ClientOnly>
-        <div v-if="pending" class="p-search__loading">CHARGEMENT...</div>
-        <div v-else-if="error" class="p-search__loading">ERROR</div>
-        <div v-else-if="!foundMovies.length">NO RESULTS</div>
-        <div v-else class="p-search__list">
-          <MovieCard
-            v-for="movie in foundMovies"
-            :movie="movie"
-            :key="movie.title"
-          />
-        </div>
-      </ClientOnly>
-    </div>
-  </NuxtLayout>
+  <div>
+    <NuxtLayout class="p-search" name="default">
+      <div class="p-search__section">
+        <h1 class="h2 mb-4">Résultats de recherche pour "{{ search }}"</h1>
+        <ClientOnly>
+          <div v-if="pending" class="p-search__loading">CHARGEMENT...</div>
+          <div v-else-if="error" class="p-search__loading">ERROR</div>
+          <div v-else-if="!foundMovies.length">NO RESULTS</div>
+          <div v-else class="p-search__list">
+            <MovieCard
+              v-for="movie in foundMovies"
+              :movie="movie"
+              :key="movie.title"
+            />
+          </div>
+        </ClientOnly>
+      </div>
+    </NuxtLayout>
+  </div>
 </template>
 
 <style lang="scss">

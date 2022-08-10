@@ -1,22 +1,29 @@
 <script lang="ts" setup>
-const { data: nowMovies } = await useFetch<{ results: ApiMovie[] }>(
-  "/api/movies"
-);
+const {
+  data: nowMovies,
+  pending,
+  error,
+} = await useFetch<{ results: ApiMovie[] }>("/api/movies");
 </script>
 
 <template>
-  <NuxtLayout class="p-home" name="default">
-    <div class="p-home__section">
-      <h1 class="h2 mb-4">Actuellement au cinéma</h1>
-      <div class="p-home__list">
-        <MovieCard
-          v-for="movie in nowMovies.results"
-          :movie="movie"
-          :key="movie.title"
-        />
+  <div>
+    <NuxtLayout class="p-home" name="default">
+      <h1 v-if="pending">Chargement...</h1>
+      <h1 v-else-if="error">Erreur: {{ error }}</h1>
+
+      <div class="p-home__section">
+        <h1 class="h2 mb-4">Actuellement au cinéma</h1>
+        <div v-if="nowMovies" class="p-home__list">
+          <MovieCard
+            v-for="movie in nowMovies.results"
+            :movie="movie"
+            :key="movie.title"
+          />
+        </div>
       </div>
-    </div>
-  </NuxtLayout>
+    </NuxtLayout>
+  </div>
 </template>
 
 <style lang="scss">

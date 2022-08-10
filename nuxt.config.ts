@@ -2,6 +2,10 @@ import { defineNuxtConfig } from "nuxt";
 
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
+  runtimeConfig: {
+    tmdbKey: process.env.THE_MOVIE_DB_KEY,
+  },
+
   meta: {
     link: [
       { rel: "preconnect", href: "https://fonts.gstatic.com" },
@@ -12,6 +16,7 @@ export default defineNuxtConfig({
       },
     ],
   },
+
   css: ["~/assets/scss/main.scss"],
 
   modules: ["@nuxtjs/color-mode"],

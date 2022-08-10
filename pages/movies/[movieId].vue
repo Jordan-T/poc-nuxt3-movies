@@ -15,10 +15,13 @@ const showVideo = (video: ApiVideo) => {
 };
 
 const route = useRoute();
-const movieId = Number(route.params.movieId);
-
-const { data: movie } = await useFetch<ApiMovieDetail>(
-  `/api/movies/${movieId}`
+const movieId = computed(() => Number(route.params.movieId));
+const {
+  data: movie,
+  pending,
+  error,
+} = await useAsyncData<ApiMovie>(`movie-${movieId.value}`, () =>
+  $fetch(`/api/movies/${movieId.value}`)
 );
 
 const mainVideos = computed(() => {
@@ -48,98 +51,106 @@ const statusText = computed(() => {
 </script>
 
 <template>
-  <NuxtLayout class="p-movie" name="default">
-    <template #sidebar>
-      <img
-        class=""
-        :src="`https://image.tmdb.org/t/p/original/${movie.poster_path}`"
-        :alt="movie.title"
-        loading="lazy"
-        width="500"
-        height="750"
-      />
-      <div class="py-4 px-4">
-        <h1 class="h3 mb-4">{{ movie.title }}</h1>
-        <p class="p-movie__sidebar-sub-title">Date de sortie</p>
-        <p>
-          {{
-            new Date(movie.release_date).toLocaleString("fr-fr", {
-              month: "long",
-              day: "numeric",
-              year: "numeric",
-            })
-          }}
-        </p>
-
-        <p class="p-movie__sidebar-sub-title">Durée</p>
-        <p>{{ movie.runtime }} minutes</p>
-
-        <p class="p-movie__sidebar-sub-title">Titre original</p>
-        <p>{{ movie.original_title }}</p>
-
-        <template v-if="statusText">
-          <p class="p-movie__sidebar-sub-title">Status</p>
-          <p>{{ statusText }}</p>
-        </template>
-      </div>
-    </template>
-
-    <div class="p-movie__content">
-      <div class="p-movie__top">
+  <div>
+    <h1 v-if="pending">Chargement...</h1>
+    <h1 v-else-if="error">Erreur: {{ error }}</h1>
+    <NuxtLayout v-else class="p-movie" name="default">
+      <template #sidebar>
         <img
-          class="p-movie__main-image"
-          :src="`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`"
+          class=""
+          :src="`https://image.tmdb.org/t/p/original/${movie.poster_path}`"
           :alt="movie.title"
           loading="lazy"
-          width="1920"
-          height="1080"
+          width="500"
+          height="750"
         />
+        <div class="py-4 px-4">
+          <h1 class="h3 mb-4">{{ movie.title }}</h1>
+          <p class="p-movie__sidebar-sub-title">Date de sortie</p>
+          <p>
+            {{
+              new Date(movie.release_date).toLocaleString("fr-fr", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })
+            }}
+          </p>
 
-        <div v-if="mainVideos.length" class="p-movie__medias">
-          <h3 class="h3 mb-3">Médias</h3>
-          <div class="p-movie__video-list">
-            <VideoPreviewCard
-              v-for="video in mainVideos"
-              :key="video.id"
-              class="p-movie__video"
-              tag="button"
-              type="button"
-              :video="video"
-              @click="showVideo(video)"
-            />
+          <p class="p-movie__sidebar-sub-title">Durée</p>
+          <p>{{ movie.runtime }} minutes</p>
+
+          <p class="p-movie__sidebar-sub-title">Titre original</p>
+          <p>{{ movie.original_title }}</p>
+
+          <template v-if="statusText">
+            <p class="p-movie__sidebar-sub-title">Status</p>
+            <p>{{ statusText }}</p>
+          </template>
+        </div>
+      </template>
+
+      <div class="p-movie__content">
+        <div class="p-movie__top">
+          <img
+            class="p-movie__main-image"
+            :src="`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`"
+            :alt="movie.title"
+            loading="lazy"
+            width="1920"
+            height="1080"
+          />
+
+          <div v-if="mainVideos.length" class="p-movie__medias">
+            <h3 class="h3 mb-3">Médias</h3>
+            <div class="p-movie__video-list">
+              <VideoPreviewCard
+                v-for="video in mainVideos"
+                :key="video.id"
+                class="p-movie__video"
+                tag="button"
+                type="button"
+                :video="video"
+                @click="showVideo(video)"
+              />
+            </div>
+
+            <AppModal
+              :title="videoSelected ? videoSelected.name : null"
+              ref="videoModalWindow"
+              @close="videoSelected = null"
+            >
+              <VideoPlayer
+                v-if="videoSelected"
+                :video="videoSelected"
+                autoplay
+              />
+            </AppModal>
+          </div>
+        </div>
+
+        <div class="p-movie__details">
+          <div class="px-4 py-4">
+            <h3 class="h3 mb-3">Notes</h3>
+            <BaseRating class="p-movie__review" :rating="movie.vote_average" />
           </div>
 
-          <AppModal
-            :title="videoSelected ? videoSelected.name : null"
-            ref="videoModalWindow"
-            @close="videoSelected = null"
-          >
-            <VideoPlayer v-if="videoSelected" :video="videoSelected" autoplay />
-          </AppModal>
+          <div class="px-4 py-4">
+            <h3 class="h3 mb-3">Synopsis</h3>
+            <p class="p-movie__description">{{ movie.overview }}</p>
+          </div>
         </div>
       </div>
 
-      <div class="p-movie__details">
-        <div class="px-4 py-4">
-          <h3 class="h3 mb-3">TODO - rating</h3>
-          <BaseRating class="p-movie__review" :rating="movie.vote_average" />
-        </div>
-
-        <div class="px-4 py-4">
-          <h3 class="h3 mb-3">Synopsis</h3>
-          <p class="p-movie__description">{{ movie.overview }}</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- TODO: remove -->
-    <details class="px-4">
-      <summary class="has-text-warning">Detail of API data</summary>
-      <pre :style="{ width: 'calc(100vw - 500px)', overflow: 'auto' }">{{
-        movie
-      }}</pre>
-    </details>
-  </NuxtLayout>
+      <!-- TODO: remove -->
+      <details class="px-4">
+        <summary class="has-text-warning">Detail of API data</summary>
+        <pre :style="{ width: 'calc(100vw - 500px)', overflow: 'auto' }">{{
+          movie
+        }}</pre>
+      </details>
+    </NuxtLayout>
+  </div>
 </template>
 
 <style lang="scss">

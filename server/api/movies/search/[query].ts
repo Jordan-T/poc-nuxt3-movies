@@ -1,4 +1,5 @@
-const key = process.env.THE_MOVIE_DB_KEY || "dummy-key";
+const runtimeConfig = useRuntimeConfig();
+const key = runtimeConfig.tmdbKey;
 
 export default defineEventHandler((event) => {
   const query = event.context.params.query;
