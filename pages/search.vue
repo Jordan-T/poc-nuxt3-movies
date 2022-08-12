@@ -7,15 +7,11 @@ const {
   error,
   pending,
   refresh,
-} = await useAsyncData<{
+} = await useFetch<{
   results: ApiMovie[];
-}>(
-  `search-${search.value}`,
-  () => $fetch(`/api/movies/search/${search.value}`),
-  {
-    server: false,
-  }
-);
+}>(() => `/api/movies/search/${search.value}`, {
+  server: false,
+});
 
 watch(route, () => {
   if (search.value !== route.query.q) {

@@ -11,6 +11,7 @@ defineProps({
     <template #image>
       <div class="c-movie-card__image-wrap">
         <img
+          v-if="movie.poster_path"
           class="c-movie-card__image"
           :src="`https://image.tmdb.org/t/p/w500/${movie.poster_path}`"
           :alt="movie.title"

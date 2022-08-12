@@ -1,17 +1,9 @@
 <script lang="ts" setup>
-// MODAL
-import { AppModal } from "vue3-a11y-modal";
-defineComponent(AppModal);
-const videoModalWindow = ref<null | { open: () => void; close: () => void }>(
-  null
-);
+const visibleVideo = ref(false);
 const videoSelected = ref<null | ApiVideo>(null);
 const showVideo = (video: ApiVideo) => {
-  if (videoModalWindow.value == null) {
-    throw new Error("videoModalWindow is not defined");
-  }
+  visibleVideo.value = true;
   videoSelected.value = video;
-  videoModalWindow.value.open();
 };
 
 const route = useRoute();
@@ -20,7 +12,7 @@ const {
   data: movie,
   pending,
   error,
-} = await useAsyncData<ApiMovie>(`movie-${movieId.value}`, () =>
+} = await useAsyncData<ApiMovieDetail>(`movie-${movieId.value}`, () =>
   $fetch(`/api/movies/${movieId.value}`)
 );
 
@@ -57,6 +49,7 @@ const statusText = computed(() => {
     <NuxtLayout v-else class="p-movie" name="default">
       <template #sidebar>
         <img
+          v-if="movie.poster_path"
           class=""
           :src="`https://image.tmdb.org/t/p/original/${movie.poster_path}`"
           :alt="movie.title"
@@ -93,6 +86,7 @@ const statusText = computed(() => {
       <div class="p-movie__content">
         <div class="p-movie__top">
           <img
+            v-if="movie.backdrop_path"
             class="p-movie__main-image"
             :src="`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`"
             :alt="movie.title"
@@ -115,17 +109,17 @@ const statusText = computed(() => {
               />
             </div>
 
-            <AppModal
-              :title="videoSelected ? videoSelected.name : null"
-              ref="videoModalWindow"
-              @close="videoSelected = null"
-            >
+            <BaseDialog v-model="visibleVideo" @close="videoSelected = null">
+              <template #title>{{
+                videoSelected ? videoSelected.name : ""
+              }}</template>
+
               <VideoPlayer
                 v-if="videoSelected"
                 :video="videoSelected"
                 autoplay
               />
-            </AppModal>
+            </BaseDialog>
           </div>
         </div>
 

@@ -1,9 +1,29 @@
 <script lang="ts" setup>
+const page = ref(1);
+const nextPage = () => {
+  page.value++;
+};
+const previousPage = () => {
+  if (page.value > 1) {
+    page.value--;
+  }
+};
 const {
   data: nowMovies,
   pending,
   error,
-} = await useFetch<{ results: ApiMovie[] }>("/api/movies");
+  refresh,
+} = await useFetch<{ results: ApiMovie[] }>(
+  () => `/api/movies?page=${page.value}`
+);
+
+watch(page, (value) => {
+  refresh();
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+});
 </script>
 
 <template>
@@ -13,7 +33,11 @@ const {
       <h1 v-else-if="error">Erreur: {{ error }}</h1>
 
       <div class="p-home__section">
-        <h1 class="h2 mb-4">Actuellement au cinéma</h1>
+        <h1 class="h2 mb-4">
+          Actuellement au cinéma<template v-if="page > 1">
+            (page {{ page }})</template
+          >
+        </h1>
         <div v-if="nowMovies" class="p-home__list">
           <MovieCard
             v-for="movie in nowMovies.results"
@@ -21,6 +45,7 @@ const {
             :key="movie.title"
           />
         </div>
+        <BasePagination v-model="page" />
       </div>
     </NuxtLayout>
   </div>

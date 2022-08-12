@@ -9,6 +9,7 @@
   "devDependencies": {
     "@nuxt/image": "^0.7.1",
     "@nuxtjs/color-mode": "^3.1.4",
+    "lodash": "^4.17.21",
     "modern-css-reset": "^1.4.0",
     "nuxt": "3.0.0-rc.6",
     "postcss-custom-media": "^8.0.2",
@@ -16,9 +17,10 @@
     "sass": "^1.54.3"
   },
   "dependencies": {
+    "@types/a11y-dialog": "^5.3.2",
     "@vueuse/core": "^9.1.0",
     "modern-normalize": "^1.1.0",
     "open-props": "^1.4.7",
-    "vue3-a11y-modal": "^0.0.3"
+    "vue-a11y-dialog": "^1.1.2"
   }
 }

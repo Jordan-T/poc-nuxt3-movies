@@ -38,6 +38,7 @@ const videoIframeSrc = computed(() => {
 
 <style lang="scss">
 .c-video-player {
+  display: block;
   max-width: 100%;
 
   @supports (aspect-ratio: 1 / 1) {
