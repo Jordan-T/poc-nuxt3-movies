@@ -4,16 +4,19 @@ const props = defineProps({
   rating: { type: Number, required: true },
 });
 
-const displayedRating = computed(() => Math.floor(props.rating * 10) / 10);
+const displayedRating = computed(() => Math.floor(props.rating * 10));
 </script>
 
 <template>
   <BaseCircularProgress
     :progress="rating * 10"
     class="c-rating"
-    :class="{ 'c-rating--danger': rating < 5 }"
+    :class="{
+      'c-rating--warning': rating < 7 && rating >= 5,
+      'c-rating--danger': rating < 5,
+    }"
   >
-    {{ displayedRating }}
+    {{ displayedRating }}<sup>%</sup>
   </BaseCircularProgress>
 </template>
 
@@ -21,7 +24,16 @@ const displayedRating = computed(() => Math.floor(props.rating * 10) / 10);
 .c-rating {
   color: $t-success;
   width: 2rem;
-  font-size: 0.75rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+
+  sup {
+    font-size: 0.5em;
+  }
+
+  &--warning {
+    color: $t-warning;
+  }
 
   &--danger {
     color: $t-danger;

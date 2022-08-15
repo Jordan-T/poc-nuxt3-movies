@@ -5,26 +5,26 @@ const pages = [
     icon: "Movie-Ticket",
     title: "Nouveautés",
   },
-  {
-    path: "/series",
-    icon: "Old-TV",
-    title: "Séries TV",
-  },
+  // {
+  //   path: "/series",
+  //   icon: "Old-TV",
+  //   title: "Séries TV",
+  // },
   {
     path: "/movies",
     icon: "Reel",
     title: "Films",
   },
-  {
-    path: "/playlists",
-    icon: "Movie",
-    title: "Playlists",
-  },
-  {
-    path: "/coming-soon",
-    icon: "Clock",
-    title: "Prochainement",
-  },
+  // {
+  //   path: "/playlists",
+  //   icon: "Movie",
+  //   title: "Playlists",
+  // },
+  // {
+  //   path: "/coming-soon",
+  //   icon: "Clock",
+  //   title: "Prochainement",
+  // },
 ];
 </script>
 
@@ -62,6 +62,11 @@ const pages = [
     &:focus,
     &.router-link-active {
       color: $t-primary;
+    }
+
+    &:focus-visible {
+      outline: solid 2px $t-primary;
+      outline-offset: -2px;
     }
   }
 }

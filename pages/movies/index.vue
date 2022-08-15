@@ -30,21 +30,19 @@ const {
   error,
   refresh,
 } = await useFetch<{ results: ApiMovie[] }>(
-  () => `/api/movies/now?page=${page.value}`
+  () => `/api/movies?page=${page.value}`
 );
 </script>
 
 <template>
-  <div>
-    <NuxtLayout class="p-home" name="default">
+  <div class="p-home">
+    <NuxtLayout name="default">
       <h1 v-if="pending">Chargement...</h1>
       <h1 v-else-if="error">Erreur: {{ error }}</h1>
 
       <div class="p-home__section">
         <h1 class="h2 mb-4">
-          Actuellement au cinéma<template v-if="page > 1">
-            (page {{ page }})</template
-          >
+          Films populaire<template v-if="page > 1"> (page {{ page }})</template>
         </h1>
         <div v-if="nowMovies" class="p-home__list">
           <MovieCard

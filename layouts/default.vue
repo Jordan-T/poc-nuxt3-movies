@@ -125,6 +125,13 @@ const logoUrl = computed(() =>
     max-height: -webkit-fill-available;
   }
 
+  &__logo {
+    &:focus-visible {
+      outline: solid 2px $t-primary;
+      outline-offset: -2px;
+    }
+  }
+
   &__top {
     position: sticky;
     top: 0;

@@ -3,7 +3,8 @@ export default defineEventHandler((event) => {
   const apiKey = runtimeConfig.tmdbKey;
   const movieId = event.context.params.movieId;
 
+  // TODO add credits
   return fetch(
-    `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}&language=fr-FR&append_to_response=videos`
-  ).then((r) => r.json());
+    `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}&language=fr-FR&append_to_response=videos,similar`
+  ).then<ApiMovieDetail>((r) => r.json());
 });

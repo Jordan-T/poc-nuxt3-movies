@@ -34,6 +34,7 @@ interface ApiMovieDetail {
   release_date: string;
   revenue: number;
   runtime: number;
+  similar: { results: ApiVideo[] };
   spoken_languages: ApiSpokenLanguage[];
   status: ApiMovieStatus;
   tagline: string | null;

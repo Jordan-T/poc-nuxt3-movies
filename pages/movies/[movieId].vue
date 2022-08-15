@@ -16,9 +16,12 @@ const {
   $fetch(`/api/movies/${movieId.value}`)
 );
 
+const allVideos = computed(() => {
+  return movie.value.videos ? movie.value.videos.results : [];
+});
+
 const mainVideos = computed(() => {
-  const results = movie.value.videos ? movie.value.videos.results : [];
-  return results.slice(0, 3);
+  return allVideos.value.slice(0, 3);
 });
 
 const statusText = computed(() => {
@@ -110,28 +113,44 @@ const statusText = computed(() => {
             </div>
 
             <BaseDialog v-model="visibleVideo" @close="videoSelected = null">
-              <template #title>{{
-                videoSelected ? videoSelected.name : ""
-              }}</template>
+              <template #title>Médias de {{ movie.title }}</template>
 
-              <VideoPlayer
+              <VideoCarousel
+                :videos="allVideos"
+                :current-index="allVideos.indexOf(videoSelected)"
+              />
+
+              <!-- <VideoPlayer
                 v-if="videoSelected"
                 :video="videoSelected"
                 autoplay
-              />
+              /> -->
             </BaseDialog>
           </div>
         </div>
 
         <div class="p-movie__details">
-          <div class="px-4 py-4">
+          <div class="p-movie__section">
             <h3 class="h3 mb-3">Notes</h3>
             <BaseRating class="p-movie__review" :rating="movie.vote_average" />
           </div>
 
-          <div class="px-4 py-4">
+          <div class="p-movie__section">
             <h3 class="h3 mb-3">Synopsis</h3>
             <p class="p-movie__description">{{ movie.overview }}</p>
+          </div>
+
+          <div v-if="movie.similar.results.length" class="p-movie__section">
+            <h3 class="h3 mb-3">Titre similaire</h3>
+            <div class="p-movie__similar-wrap">
+              <MediaScroller class="p-movie__similar">
+                <MovieCard
+                  v-for="similarMovie in movie.similar.results"
+                  :movie="similarMovie"
+                  :key="similarMovie.title"
+                />
+              </MediaScroller>
+            </div>
           </div>
         </div>
       </div>
@@ -186,6 +205,29 @@ const statusText = computed(() => {
     grid-template-columns: repeat(3, 1fr);
     gap: space(4);
     justify-content: center;
+  }
+
+  &__section {
+    padding: space(4);
+  }
+
+  &__similar {
+    // temp fix overflow (l-default__main > flex)
+    &-wrap {
+      display: flex;
+    }
+
+    flex-basis: 0;
+    flex-grow: 1;
+    width: 0;
+    // end temp fix
+
+    --gap: #{space(4)};
+    --size: 200px;
+    gap: space(4);
+    padding-top: space(4);
+    padding-bottom: space(4);
+    margin: calc(space(4) * -1) calc(space(4) * -1) 0;
   }
 }
 </style>

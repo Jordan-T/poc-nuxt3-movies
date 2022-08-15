@@ -49,7 +49,8 @@ const internalProgress = computed(() => {
 
 <style lang="scss">
 .c-circle-progress {
-  --_background: transparent;
+  --_background: currentColor;
+  --_background-opacity: 0.3;
   --_color: currentColor;
   position: relative;
   aspect-ratio: 1;
@@ -69,6 +70,7 @@ const internalProgress = computed(() => {
     circle {
       &:nth-child(1) {
         stroke: var(--_background);
+        opacity: var(--_background-opacity);
       }
 
       &:nth-child(2) {
