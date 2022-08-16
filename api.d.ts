@@ -20,6 +20,7 @@ interface ApiMovieDetail {
   backdrop_path: string | null;
   belongs_to_collection: null | object;
   budget: number;
+  credits: ApiCredits;
   genres: ApiGenre[];
   homepage: string;
   id: string;
@@ -34,7 +35,7 @@ interface ApiMovieDetail {
   release_date: string;
   revenue: number;
   runtime: number;
-  similar: { results: ApiVideo[] };
+  recommendations: { results: ApiMovie[] };
   spoken_languages: ApiSpokenLanguage[];
   status: ApiMovieStatus;
   tagline: string | null;
@@ -43,6 +44,41 @@ interface ApiMovieDetail {
   videos: { results: ApiVideo[] };
   vote_average: number;
   vote_count: number;
+}
+
+interface ApiCredits {
+  id?: number;
+  cast?: ApiCast[];
+  crew?: ApiCrew[];
+}
+
+interface ApiCast {
+  adult?: boolean;
+  gender?: number | null;
+  id?: number;
+  known_for_department?: string;
+  name?: string;
+  original_name?: string;
+  popularity?: number;
+  profile_path?: string | null;
+  cast_id?: number;
+  character?: string;
+  credit_id?: string;
+  order?: number;
+}
+
+interface ApiCrew {
+  adult?: boolean;
+  gender?: integer | null;
+  id?: integer;
+  known_for_department?: string;
+  name?: string;
+  original_name?: string;
+  popularity?: number;
+  profile_path?: string | null;
+  credit_id?: string;
+  department?: string;
+  job?: string;
 }
 
 interface ApiGenre {

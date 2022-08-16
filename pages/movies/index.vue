@@ -36,6 +36,9 @@ const {
 
 <template>
   <div class="p-home">
+    <Head>
+      <Title>Films populaire</Title>
+    </Head>
     <NuxtLayout name="default">
       <h1 v-if="pending">Chargement...</h1>
       <h1 v-else-if="error">Erreur: {{ error }}</h1>

@@ -47,6 +47,9 @@ const statusText = computed(() => {
 
 <template>
   <div>
+    <Head>
+      <Title>{{ movie.title }}</Title>
+    </Head>
     <h1 v-if="pending">Chargement...</h1>
     <h1 v-else-if="error">Erreur: {{ error }}</h1>
     <NuxtLayout v-else class="p-movie" name="default">
@@ -99,7 +102,7 @@ const statusText = computed(() => {
           />
 
           <div v-if="mainVideos.length" class="p-movie__medias">
-            <h3 class="h3 mb-3">Médias</h3>
+            <h2 class="h3 mb-3">Médias</h2>
             <div class="p-movie__video-list">
               <VideoPreviewCard
                 v-for="video in mainVideos"
@@ -130,24 +133,45 @@ const statusText = computed(() => {
         </div>
 
         <div class="p-movie__details">
-          <div class="p-movie__section">
-            <h3 class="h3 mb-3">Notes</h3>
-            <BaseRating class="p-movie__review" :rating="movie.vote_average" />
+          <div class="p-movie__top-section">
+            <div class="p-movie__section">
+              <h2 class="h3 mb-3">Synopsis</h2>
+              <p class="p-movie__description">{{ movie.overview }}</p>
+            </div>
+
+            <div class="p-movie__section">
+              <h2 class="h3 mb-3">Notes</h2>
+              <BaseRating
+                class="p-movie__review"
+                :rating="movie.vote_average"
+              />
+            </div>
           </div>
 
-          <div class="p-movie__section">
-            <h3 class="h3 mb-3">Synopsis</h3>
-            <p class="p-movie__description">{{ movie.overview }}</p>
+          <div v-if="movie.credits.cast.length" class="p-movie__section">
+            <h2 class="h3 mb-3">Têtes d'affiche</h2>
+            <div class="p-movie__cast-wrap">
+              <MediaScroller class="p-movie__cast">
+                <CastCard
+                  v-for="cast in movie.credits.cast"
+                  :cast="cast"
+                  :key="cast.id"
+                />
+              </MediaScroller>
+            </div>
           </div>
 
-          <div v-if="movie.similar.results.length" class="p-movie__section">
-            <h3 class="h3 mb-3">Titre similaire</h3>
+          <div
+            v-if="movie.recommendations.results.length"
+            class="p-movie__section"
+          >
+            <h2 class="h3 mb-3">Recommandations</h2>
             <div class="p-movie__similar-wrap">
               <MediaScroller class="p-movie__similar">
                 <MovieCard
-                  v-for="similarMovie in movie.similar.results"
+                  v-for="similarMovie in movie.recommendations.results"
                   :movie="similarMovie"
-                  :key="similarMovie.title"
+                  :key="similarMovie.id"
                 />
               </MediaScroller>
             </div>
@@ -183,7 +207,7 @@ const statusText = computed(() => {
 
   &__main-image {
     object-fit: cover;
-    height: 80vh;
+    height: 75vh;
   }
 
   &__medias {
@@ -207,12 +231,33 @@ const statusText = computed(() => {
     justify-content: center;
   }
 
+  &__top-section {
+    display: flex;
+
+    > div {
+      &:first-child {
+        flex: 1;
+      }
+
+      &:last-child {
+        text-align: right;
+      }
+    }
+  }
+
+  &__review {
+    margin: 0 auto;
+    width: 3rem;
+    font-size: 1rem;
+  }
+
   &__section {
     padding: space(4);
   }
 
+  &__cast,
   &__similar {
-    // temp fix overflow (l-default__main > flex)
+    // FIXME temp fix overflow (l-default__main > flex)
     &-wrap {
       display: flex;
     }
@@ -228,6 +273,10 @@ const statusText = computed(() => {
     padding-top: space(4);
     padding-bottom: space(4);
     margin: calc(space(4) * -1) calc(space(4) * -1) 0;
+  }
+
+  &__cast {
+    --size: 150px;
   }
 }
 </style>

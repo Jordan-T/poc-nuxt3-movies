@@ -33,6 +33,9 @@ const foundMovies = computed(() => {
 </script>
 
 <template>
+  <Head>
+    <Title>Résultats de recherche pour "{{ search }}"</Title>
+  </Head>
   <div>
     <NuxtLayout class="p-search" name="default">
       <div class="p-search__section">

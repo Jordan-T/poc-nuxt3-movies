@@ -5,6 +5,6 @@ export default defineEventHandler((event) => {
 
   // TODO add credits
   return fetch(
-    `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}&language=fr-FR&append_to_response=videos,similar`
+    `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}&language=fr-FR&append_to_response=videos,recommendations,credits`
   ).then<ApiMovieDetail>((r) => r.json());
 });
