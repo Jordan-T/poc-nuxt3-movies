@@ -8,19 +8,20 @@
   },
   "devDependencies": {
     "@nuxt/image": "^0.7.1",
-    "@nuxtjs/color-mode": "^3.1.4",
+    "@nuxtjs/color-mode": "^3.2.0",
     "lodash": "^4.17.21",
     "modern-css-reset": "^1.4.0",
-    "nuxt": "3.0.0-rc.6",
+    "nuxt": "^3.0.0",
     "postcss-custom-media": "^8.0.2",
     "postcss-jit-props": "^1.0.7",
-    "sass": "^1.54.3"
+    "sass": "^1.57.1"
   },
   "dependencies": {
     "@types/a11y-dialog": "^5.3.2",
-    "@vueuse/core": "^9.1.0",
+    "@vueuse/core": "^9.10.0",
     "modern-normalize": "^1.1.0",
-    "open-props": "^1.4.7",
+    "open-props": "^1.5.3",
     "vue-a11y-dialog": "^1.1.2"
-  }
+  },
+  "packageManager": "yarn@3.3.1"
 }

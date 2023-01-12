@@ -1,9 +1,11 @@
-export default defineEventHandler((event) => {
+export default defineEventHandler(async (event) => {
   const runtimeConfig = useRuntimeConfig();
   const apiKey = runtimeConfig.tmdbKey;
-  const query = useQuery(event);
+  const query = getQuery(event);
   const page = query.page || 1;
-  return fetch(
+  const data = await $fetch<{ results: ApiMovie[] }>(
     `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=fr-FR&page=${page}`
-  ).then<{ results: ApiMovie[] }>((r) => r.json());
+  );
+
+  return data;
 });

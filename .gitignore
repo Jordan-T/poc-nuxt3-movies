@@ -1,6 +1,17 @@
 node_modules
-*.log
+*.log*
 .nuxt
-nuxt.d.ts
+.nitro
+.cache
 .output
 .env
+dist
+.DS_Store
+
+# Yarn
+.yarn/cache
+.yarn/*state*
+.yarn
+
+# Local History
+.history

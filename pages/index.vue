@@ -1,37 +1,13 @@
 <script lang="ts" setup>
-const route = useRoute();
-const page = ref(route.query.page ? Number(route.query.page) : 1);
-watch(page, (value) => {
-  const router = useRouter();
-  router.push({
-    path: route.path,
-    query: { page: value === 1 ? undefined : value },
-  });
-});
-watch(
-  () => route.query.page,
-  (value) => {
-    if (value) {
-      page.value = Number(value);
-    } else {
-      page.value = 1;
-    }
-    refresh();
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }
-);
+const { page } = usePagination();
 
 const {
   data: nowMovies,
   pending,
   error,
-  refresh,
-} = await useFetch<{ results: ApiMovie[] }>(
-  () => `/api/movies/now?page=${page.value}`
-);
+} = await useFetch("/api/movies/now", {
+  query: { page },
+});
 </script>
 
 <template>

@@ -12,12 +12,10 @@ const {
   data: movie,
   pending,
   error,
-} = await useAsyncData<ApiMovieDetail>(`movie-${movieId.value}`, () =>
-  $fetch(`/api/movies/${movieId.value}`)
-);
+} = await useFetch(`/api/movies/${movieId.value}`);
 
 const allVideos = computed(() => {
-  return movie.value.videos ? movie.value.videos.results : [];
+  return movie.value?.videos ? movie.value.videos.results : [];
 });
 
 const mainVideos = computed(() => {
@@ -25,7 +23,7 @@ const mainVideos = computed(() => {
 });
 
 const statusText = computed(() => {
-  switch (movie.value.status) {
+  switch (movie.value?.status) {
     case "Rumored":
       return "Révélé";
     case "Planned":
@@ -48,11 +46,11 @@ const statusText = computed(() => {
 <template>
   <div>
     <Head>
-      <Title>{{ movie.title }}</Title>
+      <Title>{{ movie?.title }}</Title>
     </Head>
     <h1 v-if="pending">Chargement...</h1>
     <h1 v-else-if="error">Erreur: {{ error }}</h1>
-    <NuxtLayout v-else class="p-movie" name="default">
+    <NuxtLayout v-else-if="movie" class="p-movie" name="default">
       <template #sidebar>
         <img
           v-if="movie.poster_path"
@@ -148,7 +146,7 @@ const statusText = computed(() => {
             </div>
           </div>
 
-          <div v-if="movie.credits.cast.length" class="p-movie__section">
+          <div v-if="movie.credits.cast?.length" class="p-movie__section">
             <h2 class="h3 mb-3">Têtes d'affiche</h2>
             <div class="p-movie__cast-wrap">
               <MediaScroller class="p-movie__cast">
@@ -180,12 +178,14 @@ const statusText = computed(() => {
       </div>
 
       <!-- TODO: remove -->
-      <details class="px-4">
-        <summary class="has-text-warning">Detail of API data</summary>
-        <pre :style="{ width: 'calc(100vw - 500px)', overflow: 'auto' }">{{
-          movie
-        }}</pre>
-      </details>
+      <DevOnly>
+        <details class="px-4">
+          <summary class="has-text-warning">Detail of API data</summary>
+          <pre :style="{ width: 'calc(100vw - 500px)', overflow: 'auto' }">{{
+            movie
+          }}</pre>
+        </details>
+      </DevOnly>
     </NuxtLayout>
   </div>
 </template>

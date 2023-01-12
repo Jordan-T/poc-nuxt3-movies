@@ -7,10 +7,9 @@ const {
   error,
   pending,
   refresh,
-} = await useFetch<{
-  results: ApiMovie[];
-}>(() => `/api/movies/search/${search.value}`, {
+} = await useFetch(() => `/api/movies/search/${search.value}`, {
   server: false,
+  initialCache: false,
 });
 
 watch(route, () => {
@@ -21,14 +20,7 @@ watch(route, () => {
 });
 
 const foundMovies = computed(() => {
-  if (
-    !searchResult.value ||
-    !searchResult.value.results ||
-    !searchResult.value.results.length
-  ) {
-    return [];
-  }
-  return searchResult.value.results;
+  return searchResult.value?.results?.length ? searchResult.value.results : [];
 });
 </script>
 
