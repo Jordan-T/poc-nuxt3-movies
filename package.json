@@ -1,10 +1,11 @@
 {
   "private": true,
   "scripts": {
-    "dev": "nuxi dev",
-    "build": "nuxi build",
-    "generate": "nuxi generate",
-    "start": "node .output/server/index.mjs"
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
   },
   "devDependencies": {
     "@nuxt/image": "^0.7.1",
@@ -22,6 +23,5 @@
     "modern-normalize": "^1.1.0",
     "open-props": "^1.5.3",
     "vue-a11y-dialog": "^1.1.2"
-  },
-  "packageManager": "yarn@3.3.1"
+  }
 }
