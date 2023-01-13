@@ -11,8 +11,6 @@ dist
 # Yarn
 .yarn/cache
 .yarn/*state*
-.yarn
-.yarnrc.yml
 
 # Local History
 .history
