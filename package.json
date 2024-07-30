@@ -9,10 +9,10 @@
   },
   "devDependencies": {
     "@nuxt/image": "^0.7.1",
-    "@nuxtjs/color-mode": "^3.2.0",
+    "@nuxtjs/color-mode": "^3.4.2",
     "lodash": "^4.17.21",
     "modern-css-reset": "^1.4.0",
-    "nuxt": "^3.0.0",
+    "nuxt": "^3.12.4",
     "postcss-custom-media": "^8.0.2",
     "postcss-jit-props": "^1.0.7",
     "sass": "^1.57.1"
